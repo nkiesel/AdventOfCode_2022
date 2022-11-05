@@ -1,20 +1,14 @@
 [versions]
 junit5 = "5.9.1"
 kotest = "5.5.4"
-logback = "1.4.4"
-logging = "3.0.4"
 plugin-versions = "0.43.0"
 plugin-versionsFilter = "0.1.16"
 plugin-versionsUpdate = "0.7.0"
-slf4j = "2.0.3"
 
 [libraries]
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
-kotlin-logging-jvm = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "logging" }
-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
 [plugins]
 versions = { id = "com.github.ben-manes.versions", version.ref = "plugin-versions" }

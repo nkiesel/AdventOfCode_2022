@@ -1,9 +1,9 @@
-# AdventOfCode2022
+# Advent Of Code 2022
 
 This is the code developed for [Advent of Code 2022](https://adventofcode.com/2022).  My primary goals are:
   - have fun
   - learn something new about Kotlin
-  - don't spend more than 1 hour each day
+  - don't spend more than 2 hours each day
  
 I thus favor short and readable code over optimized code. As a rule of thumb, any code which finishes in under 1 minute
 is "good enough".  I also will not try to handle possible corner cases if the provided input file does not contain them.
