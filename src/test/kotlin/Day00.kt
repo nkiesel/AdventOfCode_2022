@@ -2,7 +2,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 /*
- Challenge for day 0: given a list of numbers, return their sum. As an example,
+ Challenge for day 0: Given a list of numbers, return their sum. As an example,
  the answer for the following list is 8:
    3
    1
@@ -21,7 +21,6 @@ class Day00 {
 
     @Test
     fun testOne(input: List<String>) {
-        // provide explicit lists for testing other cases than the actual test input
         one(sample) shouldBe 8
         one(input) shouldBe 15
     }
