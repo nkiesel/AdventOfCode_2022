@@ -9,3 +9,4 @@ od=${2:-$(date '+%d')}
 
 # the input is not the same for all participants, and we thus have to pass our session cookie value.
 # HTTPie supports storing and using session context (incl. cookies) in a JSON file.
+https --download --quiet --output "input/Day$od" --session=2022 "https://adventofcode.com/2022/day/$id/input" && git add "input/Day$od"
