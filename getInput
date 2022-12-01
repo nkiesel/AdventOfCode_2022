@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+# set TZ so that we get the correct day within the first 24 hours of the published puzzle
+export TZ=America/New_York
+
+# The URL uses un-padded day numbers, but we need 0-padded day numbers for the output file.
+id=${1:-$(date '+%-d')}
+od=${2:-$(date '+%d')}
+
+# the input is not the same for all participants, and we thus have to pass our session cookie value.
+# HTTPie supports storing and using session context (incl. cookies) in a JSON file.
