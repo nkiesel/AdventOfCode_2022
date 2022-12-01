@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 internal class UtilKtTest {
     @Test
     fun permutations() {
-        listOf("a", "b", "c").permutations().forEach { println(it) }
         listOf("a", "b", "c").permutations().toList() shouldHaveSize 6
     }
 
@@ -42,7 +41,6 @@ internal class UtilKtTest {
         map.inc("b")
         map.inc("c", 3L)
         map.inc("a")
-        println(map)
 
         map shouldHaveSize 3
         map.count("a") shouldBe 2L
@@ -56,7 +54,6 @@ internal class UtilKtTest {
         map.inc("b")
         map.inc("c", 3L)
         map.inc("a")
-        println(map)
 
         map shouldHaveSize 4
         map.count("a") shouldBe 3L
