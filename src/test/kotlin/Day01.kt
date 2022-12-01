@@ -32,9 +32,9 @@ class Day01 {
         two(input) shouldBe 203905
     }
 
-    private fun one(input: List<String>): Int = input.chunkedBy { it.isEmpty() }.maxOf { it.map(String::toInt).sum() }
+    private fun one(input: List<String>): Int = input.chunkedBy { it.isEmpty() }.maxOf { it.sumOf(String::toInt) }
 
-    private fun two(input: List<String>): Int = input.chunkedBy { it.isEmpty() }.map { it.map(String::toInt).sum() }.sorted().takeLast(3).sum()
+    private fun two(input: List<String>): Int = input.chunkedBy { it.isEmpty() }.map { it.sumOf(String::toInt) }.sorted().takeLast(3).sum()
 }
 
 /*
