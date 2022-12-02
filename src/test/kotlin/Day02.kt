@@ -1,3 +1,4 @@
+import Day02.Outcome.*
 import Day02.Shape.Paper
 import Day02.Shape.Rock
 import Day02.Shape.Scissors
@@ -25,65 +26,63 @@ class Day02 {
     }
 
     enum class Shape(val score: Int) {
-        Rock(1), Paper(2), Scissors(3)
-    }
-
-    class Round(private val opponent: Shape, private val you: Shape) {
-        fun score(): Int = you.score + when (you) {
-            Rock -> when (opponent) {
-                Rock -> 3
-                Paper -> 0
-                Scissors -> 6
-            }
-
-            Paper -> when (opponent) {
-                Rock -> 6
-                Paper -> 3
-                Scissors -> 0
-            }
-
-            Scissors -> when (opponent) {
-                Rock -> 0
-                Paper -> 6
-                Scissors -> 3
-            }
-        }
+        Rock(1), Paper(2), Scissors(3);
 
         companion object {
-            private fun fromLetter(l: Char) = when (l) {
+            fun of(c: Char) = when (c) {
                 'A', 'X' -> Rock
                 'B', 'Y' -> Paper
                 'C', 'Z' -> Scissors
-                else -> throw IllegalArgumentException()
-            }
-
-            fun one(line: String) = Round(fromLetter(line[0]), fromLetter(line[2]))
-
-            private fun forOutcome(opponent: Shape, outcome: Char) = when (outcome) {
-                'X' -> when (opponent) {
-                    Rock -> Scissors
-                    Paper -> Rock
-                    Scissors -> Paper
-                }
-                'Y' -> opponent
-                'Z' -> when (opponent) {
-                    Rock -> Paper
-                    Paper -> Scissors
-                    Scissors -> Rock
-                }
-                else -> throw IllegalArgumentException()
-            }
-
-            fun two(line: String): Round {
-                val opponent = fromLetter(line[0])
-                return Round(opponent, forOutcome(opponent, line[2]))
+                else -> error("Invalid letter $c")
             }
         }
     }
 
-    private fun one(input: List<String>): Int = input.map { Round.one(it) }.sumOf { it.score() }
 
-    private fun two(input: List<String>): Int = input.map { Round.two(it) }.sumOf { it.score() }
+    class Round(private val opponent: Shape, private val you: Shape) {
+        fun score(): Int = you.score + when (opponent to you) {
+            Rock to Paper -> 6
+            Rock to Scissors -> 0
+            Paper to Rock -> 0
+            Paper to Scissors -> 6
+            Scissors to Rock -> 6
+            Scissors to Paper -> 0
+            else -> 3
+        }
+    }
+
+    enum class Outcome {
+        LOOSE, DRAW, WIN;
+
+        companion object {
+            fun of(c: Char) = when (c) {
+                'X' -> LOOSE
+                'Y' -> DRAW
+                'Z' -> WIN
+                else -> error("Invalid letter $c")
+            }
+        }
+    }
+
+
+    private fun forOutcome(opponent: Shape, outcome: Outcome) = when (opponent to outcome) {
+        Rock to LOOSE -> Scissors
+        Rock to WIN -> Paper
+        Paper to LOOSE -> Rock
+        Paper to WIN -> Scissors
+        Scissors to LOOSE -> Paper
+        Scissors to WIN -> Rock
+        else -> opponent
+    }
+
+    private fun one(input: List<String>): Int = input.map {
+        Round(Shape.of(it[0]), Shape.of(it[2]))
+    }.sumOf { it.score() }
+
+    private fun two(input: List<String>): Int = input.map {
+        val opponent = Shape.of(it[0])
+        Round(opponent, forOutcome(opponent, Outcome.of(it[2])))
+    }.sumOf { it.score() }
 }
 
 /*
