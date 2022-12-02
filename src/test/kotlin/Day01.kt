@@ -24,6 +24,7 @@ class Day01 {
     fun testOne(input: List<String>) {
         one(sample) shouldBe 24000
         one(input) shouldBe 70764
+        two(input, 1) shouldBe 70764
     }
 
     @Test
@@ -32,9 +33,11 @@ class Day01 {
         two(input) shouldBe 203905
     }
 
-    private fun one(input: List<String>): Int = input.chunkedBy { it.isEmpty() }.maxOf { it.sumOf(String::toInt) }
+    private fun parse(input: List<String>): List<List<Int>> = input.chunkedBy { it.isEmpty() }.map { it.map(String::toInt) }
 
-    private fun two(input: List<String>): Int = input.chunkedBy { it.isEmpty() }.map { it.sumOf(String::toInt) }.sorted().takeLast(3).sum()
+    private fun one(input: List<String>): Int = parse(input).maxOf { it.sum() }
+
+    private fun two(input: List<String>, n: Int = 3): Int = parse(input).map { it.sum() }.sorted().takeLast(n).sum()
 }
 
 /*

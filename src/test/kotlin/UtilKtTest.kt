@@ -59,4 +59,24 @@ internal class UtilKtTest {
         map.count("a") shouldBe 3L
         map.count("d") shouldBe 1L
     }
+
+    @Test
+    fun gcd() {
+        gcd(10, 5) shouldBe 5
+        gcd(10, 15) shouldBe 5
+        gcd(10L, 15L) shouldBe 5L
+        gcd(10, 10) shouldBe 10
+        gcd(101, 103) shouldBe 1
+        gcd(101 * 3, 103 * 6) shouldBe 3
+    }
+
+    @Test
+    fun lcm() {
+        lcm(10, 5) shouldBe 10
+        lcm(10, 15) shouldBe 30
+        lcm(10L, 15L) shouldBe 30L
+        lcm(10, 10) shouldBe 10
+        lcm(101, 103) shouldBe 101 * 103
+        lcm(101 * 3, 103 * 6) shouldBe 101 * 103 * 6
+    }
 }

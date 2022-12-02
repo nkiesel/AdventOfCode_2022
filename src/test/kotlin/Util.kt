@@ -60,3 +60,23 @@ class CountingMap<T>(
         return entries.joinToString(", ", prefix = "[", postfix = "]") { (key, count) -> "$key: ${count.value}" }
     }
 }
+
+/**
+ * greatest common divisor of 2 Int values
+ */
+tailrec fun gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
+
+/**
+ * greatest common divisor of 2 Long values
+ */
+tailrec fun gcd(a: Long, b: Long): Long = if (b == 0L) a else gcd(b, a % b)
+
+/**
+ * least common multiple of 2 Int values
+ */
+fun lcm(a: Int, b: Int): Int = a / gcd(a, b) * b
+
+/**
+ * least common multiple of 2 Long values
+ */
+fun lcm(a: Long, b: Long): Long = a / gcd(a, b) * b
