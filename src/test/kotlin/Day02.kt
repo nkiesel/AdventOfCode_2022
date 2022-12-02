@@ -1,4 +1,5 @@
-import Day02.Outcome.*
+import Day02.Outcome.Loose
+import Day02.Outcome.Win
 import Day02.Shape.Paper
 import Day02.Shape.Rock
 import Day02.Shape.Scissors
@@ -38,9 +39,8 @@ class Day02 {
         }
     }
 
-
     class Round(private val opponent: Shape, private val you: Shape) {
-        fun score(): Int = you.score + when (opponent to you) {
+        fun score() = you.score + when (opponent to you) {
             Rock to Paper -> 6
             Rock to Scissors -> 0
             Paper to Rock -> 0
@@ -52,26 +52,25 @@ class Day02 {
     }
 
     enum class Outcome {
-        LOOSE, DRAW, WIN;
+        Loose, Draw, Win;
 
         companion object {
             fun of(c: Char) = when (c) {
-                'X' -> LOOSE
-                'Y' -> DRAW
-                'Z' -> WIN
+                'X' -> Loose
+                'Y' -> Draw
+                'Z' -> Win
                 else -> error("Invalid letter $c")
             }
         }
     }
 
-
     private fun forOutcome(opponent: Shape, outcome: Outcome) = when (opponent to outcome) {
-        Rock to LOOSE -> Scissors
-        Rock to WIN -> Paper
-        Paper to LOOSE -> Rock
-        Paper to WIN -> Scissors
-        Scissors to LOOSE -> Paper
-        Scissors to WIN -> Rock
+        Rock to Loose -> Scissors
+        Rock to Win -> Paper
+        Paper to Loose -> Rock
+        Paper to Win -> Scissors
+        Scissors to Loose -> Paper
+        Scissors to Win -> Rock
         else -> opponent
     }
 
@@ -89,8 +88,8 @@ class Day02 {
 This required more code than I expected (though I'm sure there will be much shorter and better solutions posted).
 I still like the readability of the `when` expressions very much (and that they are expressions and not statements).
 I also spent a bit of time to refactor the code after I solved the puzzles to make it a bit more readable (e.g. I
- initially used a Pair(Shape, Shape) and top-level functions instead of the class Round).
+ initially used a Pair(Shape, Shape) instead of the class Round).
 
 The top-level imports for Rock, Paper, and Scissors are a hack to work around a current Kotlin language limitation:
-Without these imports, every Rock would have to be written as Shape.Rock (and same for Paper and Scissors).
+Without these imports, every Rock would have to be written as Shape.Rock (and same for Paper and Scissors and Win and Loose).
 */
