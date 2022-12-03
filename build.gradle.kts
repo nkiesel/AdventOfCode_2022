@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.7.21"
+    kotlin("jvm") version "1.7.22"
     alias(libs.plugins.versions)
     alias(libs.plugins.versions.filter)
     alias(libs.plugins.versions.update)
@@ -23,6 +23,9 @@ tasks.test {
     minHeapSize = "1g"
     maxHeapSize = "10g"
     testLogging.showStandardStreams = true
+    filter {
+        setIncludePatterns("UtilKtTest", "Day0*", "Day1*", "Day2*")
+    }
 }
 
 kotlin {

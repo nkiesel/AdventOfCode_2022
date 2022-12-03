@@ -1,2 +1,2 @@
 #!/bin/zsh
-./gradlew --no-build-cache cleanTest test
+./gradlew test --rerun
