@@ -23,25 +23,21 @@ class Day04 {
         two(input) shouldBe 907
     }
 
-    private val pattern = Regex("""^(\d+)-(\d+),(\d+)-(\d+)$""")
+    private val pattern = Regex("""\D""")
 
-    private fun one(input: List<String>): Int = input.map {
-        pattern.matchEntire(it)!!.groupValues.drop(1).map(String::toInt)
-    }.count { (l1, r1, l2, r2) ->
-        l1 <= l2 && r1 >= r2 || l2 <= l1 && r2 >= r1
-    }
+    private fun one(input: List<String>): Int = input
+        .map { it.split(pattern).map(String::toInt) }
+        .count { (l1, r1, l2, r2) -> l1 <= l2 && r1 >= r2 || l2 <= l1 && r2 >= r1 }
 
-    private fun two(input: List<String>): Int = input.map {
-        pattern.matchEntire(it)!!.groupValues.drop(1).map(String::toInt)
-    }.count { (l1, r1, l2, r2) ->
-        l2 in l1..r1 || l1 in l2..r2
-    }
+    private fun two(input: List<String>): Int = input
+        .map { it.split(pattern).map(String::toInt) }
+        .count { (l1, r1, l2, r2) -> l2 in l1..r1 || l1 in l2..r2 }
 }
 
 /*
-Again pretty simple, though my first run failed because I forgot the `drop(1)` to remove the group[0] aka full match
-from the matchresult group values.
+Again pretty simple. I solved it first by matching the lines against a pattern, but then switched to the `split`
+approach because that is a bit simpler, and we know that the input is always well-formed.
 
-Another approach would have been the convert the ranges into Set<Int> and then use intersect etc., but that would
-be more expensive and not cleaner.
+Another approach for counting would have been the convert the ranges into Set<Int> and then use intersect etc.,
+but that would be more expensive and not cleaner.
  */
