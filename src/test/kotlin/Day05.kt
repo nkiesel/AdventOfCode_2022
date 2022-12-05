@@ -32,7 +32,7 @@ class Day05 {
         val stacks = mutableMapOf<Int, ArrayDeque<Char>>()
         val moves = mutableListOf<Move>()
 
-        fun top() = stacks.keys.sorted().map { stacks[it]!!.last() }.joinToString("")
+        fun top() = stacks.entries.sortedBy { it.key }.map { (_, s) -> s.last() }.joinToString("")
     }
 
     private fun parse(input: List<String>): Parsed {
@@ -49,7 +49,9 @@ class Day05 {
     private fun one(input: List<String>): String {
         val p = parse(input)
         for (move in p.moves) {
-            repeat(move.count) { p.stacks[move.dest]!! += p.stacks[move.source]!!.removeLast() }
+            val s = p.stacks[move.source]!!
+            val d = p.stacks[move.dest]!!
+            repeat(move.count) { d += s.removeLast() }
         }
         return p.top()
     }
@@ -57,8 +59,11 @@ class Day05 {
     private fun two(input: List<String>): String {
         val p = parse(input)
         for (move in p.moves) {
-            p.stacks[move.dest]!! += p.stacks[move.source]!!.takeLast(move.count)
-            repeat(move.count) { p.stacks[move.source]!!.removeLast() }
+            val s = p.stacks[move.source]!!
+            val d = p.stacks[move.dest]!!
+            val c = move.count
+            d += s.takeLast(c)
+            repeat(c) { s.removeLast() }
         }
         return p.top()
     }
@@ -66,14 +71,14 @@ class Day05 {
 
 /*
 Nice one! I first thought that parsing the input data would be tricky, but after realizing that I could use the `range` to
-get the index of a crate in the line, it was pretty straight-forward to parse the creates. For simplicity, I try to parse
+get the index of a crate in the line, it was pretty straight-forward to parse the crate stacks. For simplicity, I try to parse
 each line as a crate line or a move, instead of parsing in stages.
 
 The only mistake I made was to use global variables for the stacks and moves, because I forgot to clear between the tests,
 which screwed up the result once I ran more than one test.  I then created the `Parsed` class, and all went well.  Global
 variables are like the "goto" of data structures: sometimes very efficient, but generally not recommended!
 
-Part 2 could be done with a single `repeat` like part 1 by using a clever `removeAt`,
-(something like `removeAt(move.source.lastIndex - move.count + it)`), but I stayed away form this because it would make the
+Part 2 could be done with a single `repeat` like part 1 by using a clever `removeAt`, (something like
+`removeAt(move.source.lastIndex - move.count + it)`), but I stayed away form this because it would make the
 code less readable.
- */
+*/
