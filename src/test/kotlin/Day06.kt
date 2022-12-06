@@ -24,6 +24,6 @@ class Day06 {
 }
 
 /*
-This was too easy (or Kotlin stdlib is too good). Only improvements after earning the 2 stars was to use a single
+This was too easy (or Kotlin stdlib is too good). Only improvements after earning the 2 stars were to use a single
 implementation function, and using `windowedSequence` instead of `windowed` as a tiny optimization.
  */
