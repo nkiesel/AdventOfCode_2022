@@ -16,13 +16,14 @@ class Day06 {
         two(input) shouldBe 3588
     }
 
-    private fun pos(input: List<String>, n: Int): Int = input[0].windowed(n).indexOfFirst { it.toSet().size == n } + n
+    private fun solve(input: List<String>, n: Int): Int = input[0].windowedSequence(n).indexOfFirst { it.toSet().size == n } + n
 
-    private fun one(input: List<String>): Int = pos(input, 4)
+    private fun one(input: List<String>): Int = solve(input, 4)
 
-    private fun two(input: List<String>): Int = pos(input, 14)
+    private fun two(input: List<String>): Int = solve(input, 14)
 }
 
 /*
-This was too easy (or Kotlin stdlib is too good)
+This was too easy (or Kotlin stdlib is too good). Only improvements after earning the 2 stars was to use a single
+implementation function, and using `windowedSequence` instead of `windowed` as a tiny optimization.
  */
