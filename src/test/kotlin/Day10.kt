@@ -2,12 +2,6 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class Day10 {
-    private val s0 = """
-        noop
-        addx 3
-        addx -5
-    """.trimIndent().lines()
-
     private val sample = """
         addx 15
         addx -11
@@ -159,52 +153,62 @@ class Day10 {
 
     @Test
     fun testOne(input: List<String>) {
-        oneTwo(sample, false) shouldBe 13140
-        oneTwo(input, false) shouldBe 13820
+        one(sample) shouldBe 13140
+        one(input) shouldBe 13820
     }
 
     @Test
     fun testTwo(input: List<String>) {
-        oneTwo(sample, false) shouldBe 13140
-        oneTwo(input, true) shouldBe 13820
+        two(input) shouldBe """
+   ████████     ██    ██       ████       ██████       ██    ██       ████       ██████       ██    ██  
+         ██     ██  ██       ██    ██     ██    ██     ██  ██       ██    ██     ██    ██     ██  ██    
+       ██       ████         ██           ██    ██     ████         ██           ██    ██     ████      
+     ██         ██  ██       ██  ████     ██████       ██  ██       ██  ████     ██████       ██  ██    
+   ██           ██  ██       ██    ██     ██  ██       ██  ██       ██    ██     ██  ██       ██  ██    
+   ████████     ██    ██       ██████     ██    ██     ██    ██       ██████     ██    ██     ██    ██  
+"""
     }
 
-    private fun oneTwo(input: List<String>, draw: Boolean): Int {
+    private fun one(input: List<String>): Int {
         var x = 1
         var strength = 0
         var cycle = 1
+        input.flatMap { line ->
+            val cmd = line.split(" ")
+            if (cmd[0] == "noop") listOf(0) else listOf(0, cmd[1].toInt())
+        }.forEach { inc ->
+            if ((cycle + 20) % 40 == 0) strength += cycle * x
+            cycle++
+            x += inc
+        }
+        return strength
+    }
+
+    private fun two(input: List<String>): String {
+        var x = 1
         var pixelPos = 0
-        val crt = buildString {
-            input.forEach { line ->
-                val add = line != "noop"
-                repeat(if (add) 2 else 1) {
-                    if (draw) {
-                        if (pixelPos % 5 == 0) append("   ")
-                        append(if (x in (pixelPos - 1)..(pixelPos + 1)) '█' else ' ')
-                        if (++pixelPos == 40) append("\n").also { pixelPos = 0 }
-                    }
-
-                    if ((cycle + 20) % 40 == 0) {
-                        strength += cycle * x
-                    }
-                    cycle++
-                }
-
-                if (add) {
-                    x += line.drop(5).toInt()
-                }
+        return buildString {
+            appendLine()
+            input.flatMap { line ->
+                val cmd = line.split(" ")
+                if (cmd[0] == "noop") listOf(0) else listOf(0, cmd[1].toInt())
+            }.forEach { inc ->
+                if (pixelPos % 5 == 0) append("   ")
+                append(if (x in (pixelPos - 1)..(pixelPos + 1)) "██" else "  ")
+                if (++pixelPos == 40) appendLine().also { pixelPos = 0 }
+                x += inc
             }
         }
-
-        if (draw) println(crt)
-
-        return strength
     }
 }
 /*
 Still pretty simple. I initially misread the "2 cycles for addx" instructions, but the sample
 data helped as usual. The only obstacle was that I thought the sample would also render 8 letters,
-and I stared at the generated image quite a bit, trying to make sens of it.  I finally gave up and
+and I stared at the generated image quite a bit, trying to make sense of it.  I finally gave up and
 rendered the image using the real input, and suddenly the letters became visible.  I then increased
 the readability a bit more by using nicer pixels and adding some whitespace.
+
+Update: after looking at some other solutions, I liked the use "listOf(0) or listOf(0, inc)" idea more
+than my "repeat" approach, so changed that. Also split again into 2 implementations so that I can add
+the expected result for part 2 as well.
 */
