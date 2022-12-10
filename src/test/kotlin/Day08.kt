@@ -26,34 +26,29 @@ class Day08 {
         fun visible(h: Int) = if (height > h) height.also { visible = true } else h
     }
 
-    private fun parse(input: List<String>) = input.map { line -> line.map { Tree(it.digitToInt()) }.toTypedArray() }.toTypedArray()
+    private fun parse(input: List<String>) = input
+        .map { line -> line.map { Tree(it.digitToInt()) }.toTypedArray() }
+        .toTypedArray()
 
     private fun one(input: List<String>): Int {
         val forest = parse(input)
-        var h: Int
-        for (row in forest) {
-            h = -1
-            for (c in forest[0].indices) {
-                h = row[c].visible(h)
-            }
-            h = -1
-            for (c in forest[0].indices.reversed()) {
-                h = row[c].visible(h)
+
+        fun look(p1: IntProgression, p2: IntProgression, swap: Boolean) {
+            for (i in if (swap) p2 else p1) {
+                var h = -1
+                for (j in if (swap) p1 else p2) {
+                    h = forest[if (swap) j else i][if (swap) i else j].visible(h)
+                }
             }
         }
-        for (c in forest[0].indices) {
-            h = -1
-            for (r in forest.indices) {
-                h = forest[r][c].visible(h)
-            }
-            h = -1
-            for (r in forest.indices.reversed()) {
-                h = forest[r][c].visible(h)
-            }
-        }
+
+        look(forest.indices, forest[0].indices, false)
+        look(forest.indices, forest[0].indices.reversed(), false)
+        look(forest.indices, forest[0].indices, true)
+        look(forest.indices.reversed(), forest[0].indices, true)
+
         return forest.sumOf { row -> row.count { it.visible } }
     }
-
 
     private fun two(input: List<String>): Int {
         val forest = parse(input)
