@@ -63,7 +63,7 @@ class Day11 {
 
         companion object {
             fun of(lines: List<String>) = Monkey(
-                Regex("""\d+""").findAll(lines[1]).map { it.value.toLong() }.toMutableList(),
+                lines[1].substringAfter(" items: ").split(", ").map(String::toLong).toMutableList(),
                 lines[2].substringAfter(" old ").split(" ").let { (op, num) -> Operation(op, num.toLongOrNull()) },
                 lines[3].substringAfter(" by ").toLong(),
                 lines[4].substringAfter(" monkey ").toInt(),
