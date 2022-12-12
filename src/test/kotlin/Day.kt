@@ -16,7 +16,11 @@ class Day {
         two(input) shouldBe 0
     }
 
-    private fun one(input: List<String>): Int = TODO()
+    private fun one(input: List<String>): Int {
+        return 0
+    }
 
-    private fun two(input: List<String>): Int = TODO()
+    private fun two(input: List<String>): Int {
+        return 0
+    }
 }

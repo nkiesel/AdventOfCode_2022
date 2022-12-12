@@ -20,6 +20,8 @@ fun Array<IntArray>.neighbors4(x: Int, y: Int): List<Pair<Int, Int>> =
         .map { (dx, dy) -> x + dx to y + dy }
         .filter { (cx, cy) -> cx in this[0].indices && cy in this.indices }
 
+fun Array<CharArray>.neighbors4(xy: Pair<Int, Int>) = neighbors4(xy.first, xy.second)
+
 fun Array<CharArray>.neighbors4(x: Int, y: Int): List<Pair<Int, Int>> =
     listOf(-1 to 0, 1 to 0, 0 to -1, 0 to 1)
         .map { (dx, dy) -> x + dx to y + dy }

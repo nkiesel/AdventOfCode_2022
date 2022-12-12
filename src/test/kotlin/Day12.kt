@@ -26,39 +26,30 @@ class Day12 {
 
     private fun parse(input: List<String>, ps: Char = 'S'): Parsed {
         val map = input.map { it.toCharArray() }.toTypedArray()
-        val neighbors = mutableMapOf<String, MutableList<String>>().withDefault { mutableListOf() }
+        val neighbors = mutableMapOf<String, List<String>>()
         val lowest = mutableListOf<String>()
         var start = ""
         var end = ""
 
-        fun height(c: Char) = when (c) {
-            'S' -> 'a'
-            'E' -> 'z'
-            else -> c
+        data class Square(val point: Pair<Int, Int>) {
+            val name = "${point.first}|${point.second}"
+            val char = map[point.second][point.first]
+            val height = when (char) {
+                'S' -> 'a'.also { start = name }
+                'E' -> 'z'.also { end = name}
+                else -> char
+            }
         }
-
-        fun name(x: Int, y: Int) = "$x|$y"
-        fun name(xy: Pair<Int, Int>) = "${xy.first}|${xy.second}"
-        fun map(x: Int, y: Int) = map[y][x]
-        fun map(xy: Pair<Int, Int>) = map[xy.second][xy.first]
 
         for (x in input[0].indices) {
             for (y in input.indices) {
-                val c1 = map(x, y)
-                val n1 = name(x, y)
-                when (c1) {
-                    'S' -> start = n1
-                    'E' -> end = n1
-                }
-                val h = height(c1)
-                if (h == ps) lowest += n1
-                for (n in map.neighbors4(x, y)) {
-                    val c2 = map(n)
-                    val h2 = height(c2)
-                    if (h2 != ps && h2 - h <= 1) {
-                        neighbors.getOrPut(n1) { mutableListOf() } += name(n)
-                    }
-                }
+                val p = Square(x to y)
+                if (p.height == ps) lowest += p.name
+                neighbors[p.name] = map
+                    .neighbors4(p.point)
+                    .map { Square(it) }
+                    .filter { it.height != ps && it.height - p.height <= 1 }
+                    .map { it.name }
             }
         }
 
