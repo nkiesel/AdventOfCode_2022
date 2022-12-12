@@ -67,7 +67,7 @@ class Day11 {
                 lines[2].substringAfter(" old ").split(" ").let { (op, num) -> Operation(op, num.toLongOrNull()) },
                 lines[3].substringAfter(" by ").toLong(),
                 lines[4].substringAfter(" monkey ").toInt(),
-                lines[5].substringAfter(" monkey ").toInt()
+                lines[5].substringAfter(" monkey ").toInt(),
             )
         }
     }
@@ -99,7 +99,7 @@ class Day11 {
 }
 
 /*
-First Int overflow puzzle! Switching to Long was an obvious choice, but even tha twas not good enough.
+First Int overflow puzzle! Switching to Long was an obvious choice, but even that was not good enough.
 So first thought I could still brute-force it by switching to BigInteger, but that did not terminate
 within 30 seconds.  I knew I had to keep the worry levels somehow under control.  The "next monkey" test
 always uses "divisible by ...", so thought I might apply modulo the product of all the divisors.  That works
