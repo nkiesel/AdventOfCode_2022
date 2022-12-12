@@ -57,3 +57,18 @@ fun <T> shortestPath(shortestPathTree: Map<T, T?>, start: T, end: T): List<T> {
 
     return pathTo(start, end)
 }
+
+// copied from https://github.com/ephemient/aoc2022/blob/main/kt/src/commonMain/kotlin/com/github/ephemient/aoc2022/Day12.kt
+fun <T> bfs(start: T, next: (T) -> Iterable<T>): Sequence<IndexedValue<T>> = sequence {
+    val seen = mutableSetOf(start)
+    val queue = ArrayDeque(listOf(IndexedValue(0, start)))
+    while (queue.isNotEmpty()) {
+        val a = queue.removeFirst()
+        yield(a)
+        for (b in next(a.value)) {
+            if (seen.add(b)) {
+                queue.add(IndexedValue(a.index + 1, b))
+            }
+        }
+    }
+}
