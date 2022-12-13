@@ -48,24 +48,26 @@ class Day13 {
     }
 
     private fun two(input: List<String>): Int {
-        val v2 = parse("[[2]]")
-        val v6 = parse("[[6]]")
-        val l = (input.filter { it.isNotEmpty() }.map { parse(it) } + listOf(v2, v6)).sorted()
-        return (l.indexOf(v2) + 1) * (l.indexOf(v6) + 1)
+        val d = listOf(2, 6).map { parse("[[$it]]") }
+        val l = (input.filter { it.isNotEmpty() }.map { parse(it) } + d).sorted()
+        return (l.indexOf(d[0]) + 1) * (l.indexOf(d[1]) + 1)
     }
 
-    private sealed interface Item : Comparable<Item> {
-        override fun compareTo(other: Item): Int = when {
-            this is Single && other is Single -> this.v compareTo other.v
-            this is Multi && other is Multi -> this.v.zip(other.v).fold(0) { acc, (l, r) -> if (acc == 0) l compareTo r else acc }.takeIf { it != 0 } ?: this.v.size compareTo other.v.size
-            this is Single -> Multi(mutableListOf(this)) compareTo other
-            else -> this compareTo Multi(mutableListOf(other))
+    private sealed interface Item : Comparable<Item>
+
+    private data class Single(var v: Int) : Item {
+        override fun compareTo(other: Item): Int = when (other) {
+            is Single -> v compareTo other.v
+            else -> Multi(mutableListOf(this)) compareTo other
         }
     }
 
-    private data class Single(var v: Int) : Item
-
-    private data class Multi(val v: MutableList<Item>) : Item
+    private data class Multi(val v: MutableList<Item>) : Item {
+        override fun compareTo(other: Item): Int = when (other) {
+            is Multi -> v.zip(other.v).fold(0) { acc, (l, r) -> if (acc == 0) l compareTo r else acc }.takeIf { it != 0 } ?: v.size compareTo other.v.size
+            else -> this compareTo Multi(mutableListOf(other))
+        }
+    }
 
     private fun parse(line: String): Item {
         val stack = ArrayDeque<Multi>()
@@ -115,4 +117,7 @@ Again got the code correct in the first attempt! Actually, not 100% true: I had 
 However, after these were fixed, the rest fell into place. The only change for part 2 was that I initially used a "rightOrder"
 function and that "Item" did not implement "Comparable<Item>".  I then changed this and used "compareTo" for part 1 as well
 (which I in hindsight should have done anyway).
- */
+
+Update: realized that I could push the "compareTo" implementation into the "Single" and "Multi" classes, which simplified
+the code a bit more.
+*/
