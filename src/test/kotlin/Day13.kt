@@ -67,7 +67,7 @@ class Day13 {
 
         override fun compareTo(other: Item): Int = when (other) {
             is Single -> this compareTo Multi(other)
-            is Multi -> v.zip(other.v).fold(0) { acc, (l, r) -> if (acc != 0) acc else l compareTo r }.takeIf { it != 0 } ?: (v.size compareTo other.v.size)
+            is Multi -> v.zip(other.v, Item::compareTo).find { it != 0 } ?: (v.size compareTo other.v.size)
         }
     }
 
