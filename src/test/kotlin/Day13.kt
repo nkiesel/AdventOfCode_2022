@@ -43,7 +43,7 @@ class Day13 {
     private fun one(input: List<String>): Int {
         return input
             .chunkedBy { it.isEmpty() }
-            .mapIndexed { i, l -> if (parse(l[0]) compareTo parse(l[1]) == -1) i + 1 else 0 }
+            .mapIndexed { i, (l, r) -> if (parse(l) compareTo parse(r) < 0) i + 1 else 0 }
             .sum()
     }
 
@@ -58,26 +58,28 @@ class Day13 {
     private data class Single(var v: Int) : Item {
         override fun compareTo(other: Item): Int = when (other) {
             is Single -> v compareTo other.v
-            else -> Multi(mutableListOf(this)) compareTo other
+            is Multi -> Multi(this) compareTo other
         }
     }
 
-    private data class Multi(val v: MutableList<Item>) : Item {
+    private data class Multi(val v: MutableList<Item> = mutableListOf()) : Item {
+        constructor(v: Item) : this(mutableListOf(v))
+
         override fun compareTo(other: Item): Int = when (other) {
-            is Multi -> v.zip(other.v).fold(0) { acc, (l, r) -> if (acc == 0) l compareTo r else acc }.takeIf { it != 0 } ?: v.size compareTo other.v.size
-            else -> this compareTo Multi(mutableListOf(other))
+            is Single -> this compareTo Multi(other)
+            is Multi -> v.zip(other.v).fold(0) { acc, (l, r) -> if (acc != 0) acc else l compareTo r }.takeIf { it != 0 } ?: (v.size compareTo other.v.size)
         }
     }
 
     private fun parse(line: String): Item {
         val stack = ArrayDeque<Multi>()
-        var multi = Multi(mutableListOf())
+        var multi = Multi()
         var single: Single? = null
         for (c in line.drop(1)) {
             when (c) {
                 '[' -> {
                     stack.addLast(multi)
-                    multi = Multi(mutableListOf())
+                    multi = Multi()
                 }
 
                 ']' -> {
@@ -86,8 +88,9 @@ class Day13 {
                         single = null
                     }
                     if (stack.isNotEmpty()) {
-                        stack.last().v += multi
-                        multi = stack.removeLast()
+                        val top = stack.removeLast()
+                        top.v += multi
+                        multi = top
                     }
                 }
 
@@ -108,6 +111,7 @@ class Day13 {
                 }
             }
         }
+
         return multi
     }
 }
