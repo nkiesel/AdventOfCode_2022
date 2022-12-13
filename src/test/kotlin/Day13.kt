@@ -74,18 +74,18 @@ class Day13 {
     private fun parse(line: String): Item {
         val stack = ArrayDeque<Multi>()
         var multi = Multi()
-        var single: Single? = null
+        var number: Int? = null
         for (c in line.drop(1)) {
             when (c) {
                 '[' -> {
-                    stack.addLast(multi)
+                    stack += multi
                     multi = Multi()
                 }
 
                 ']' -> {
-                    if (single != null) {
-                        multi.v += single
-                        single = null
+                    if (number != null) {
+                        multi.v += Single(number)
+                        number = null
                     }
                     if (stack.isNotEmpty()) {
                         val top = stack.removeLast()
@@ -95,19 +95,15 @@ class Day13 {
                 }
 
                 ',' -> {
-                    if (single != null) {
-                        multi.v += single
-                        single = null
+                    if (number != null) {
+                        multi.v += Single(number)
+                        number = null
                     }
                 }
 
                 else -> {
                     val i = c.digitToInt()
-                    if (single != null) {
-                        single.v = single.v * 10 + i
-                    } else {
-                        single = Single(i)
-                    }
+                    number = if (number != null) number * 10 + i else i
                 }
             }
         }
