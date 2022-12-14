@@ -53,21 +53,15 @@ class Day14 {
                         maxX += 1
                         set(minX, y, '=')
                         set(maxX, y, '=')
-                        set(x, y - 1, c)
-                        dropped += 1
-                        return false
                     }
 
                     get(x, y) == '.' -> continue
-                    get(x - 1, y) == '.' -> x -= 1
-                    get(x + 1, y) == '.' -> x += 1
-                    else -> {
-                        if (y == 0) return true
-                        set(x, y - 1, c)
-                        dropped += 1
-                        return false
-                    }
+                    get(x - 1, y) == '.' -> { x -= 1; continue }
+                    get(x + 1, y) == '.' -> { x += 1; continue }
                 }
+                set(x, y - 1, c)
+                dropped += 1
+                return false
             }
             return true
         }
