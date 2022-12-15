@@ -4,12 +4,13 @@ kotest = "5.5.4"
 plugin-versions = "0.44.0"
 plugin-versionsFilter = "0.1.16"
 plugin-versionsUpdate = "0.7.0"
+serialization = "1.4.1"
 
 [libraries]
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
-
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 [plugins]
 versions = { id = "com.github.ben-manes.versions", version.ref = "plugin-versions" }
 versions-filter = { id = "se.ascp.gradle.gradle-versions-filter", version.ref = "plugin-versionsFilter" }

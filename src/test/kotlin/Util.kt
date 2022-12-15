@@ -1,3 +1,5 @@
+import kotlin.math.absoluteValue
+
 fun <T> List<T>.permutations(): Sequence<List<T>> = sequence {
     val indices = IntArray(size) { it }
     while (true) {
@@ -89,3 +91,5 @@ fun lcm(a: Int, b: Int): Int = a / gcd(a, b) * b
  * least common multiple of 2 Long values
  */
 fun lcm(a: Long, b: Long): Long = a / gcd(a, b) * b
+
+fun md(x1: Int, y1: Int, x2: Int, y2: Int) = (x1 - x2).absoluteValue + (y1 - y2).absoluteValue
