@@ -72,3 +72,17 @@ fun <T> bfs(start: T, next: (T) -> Iterable<T>): Sequence<IndexedValue<T>> = seq
         }
     }
 }
+
+fun <T> dfs(start: T, next: (T) -> Iterable<T>): Sequence<IndexedValue<T>> = sequence {
+    val seen = mutableSetOf(start)
+    val queue = ArrayDeque(listOf(IndexedValue(0, start)))
+    while (queue.isNotEmpty()) {
+        val a = queue.removeFirst()
+        yield(a)
+        for (b in next(a.value)) {
+            if (seen.add(b)) {
+                queue.addFirst(IndexedValue(a.index + 1, b))
+            }
+        }
+    }
+}
