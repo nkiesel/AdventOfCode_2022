@@ -31,7 +31,7 @@ class Day17 {
             return false
         }
 
-        fun add(chamber: ArrayDeque<BooleanArray>) {
+        fun mergeInto(chamber: ArrayDeque<BooleanArray>) {
             lines.withIndex().forEach { add(it, chamber) }
         }
 
@@ -79,7 +79,6 @@ class Day17 {
             }
         }
     }
-
 
     private class Minus(num: Long) : Shape("minus", num) {
         override val lines = listOf(
@@ -132,7 +131,6 @@ class Day17 {
 
     private class Chamber(val gas: String) {
         val chamber = ArrayDeque<BooleanArray>()
-        private var discarded = 0L
         private var skipped = 0L
         var gasServed = 0L
 
@@ -157,25 +155,16 @@ class Day17 {
         }
 
         fun add(shape: Shape) {
-            val l = shape.lines
-            val c = l.size
-            addEmptyLines(3 + c)
-            while (true) {
+            repeat(3 + shape.lines.size) { chamber.addFirst(BooleanArray(7)) }
+            do {
                 when (getGas.next()) {
                     '<' -> shape.left(chamber)
                     '>' -> shape.right(chamber)
                 }
                 gasServed++
-                if (!shape.down(chamber)) {
-                    break
-                }
-            }
-            shape.add(chamber)
+            } while (shape.down(chamber))
+            shape.mergeInto(chamber)
             while (chamber[0].none { it }) chamber.removeFirst()
-        }
-
-        fun addEmptyLines(num: Int) {
-            repeat(num) { chamber.addFirst(BooleanArray(7) { false }) }
         }
 
         fun skipForward(num: Long) {
@@ -183,15 +172,8 @@ class Day17 {
         }
 
         fun size(): Long {
-            return discarded + skipped + chamber.size - 1
-        }
-
-        fun shrink() {
-            repeat(chamber.size - 1000) {
-                discarded++
-                chamber.removeLast()
-            }
-            return
+            // -1 because of the bottom line we added
+            return skipped + chamber.size - 1
         }
     }
 
@@ -199,6 +181,8 @@ class Day17 {
     fun testOne(input: List<String>) {
         one(sample) shouldBe 3068
         one(input) shouldBe 3235
+        two(sample, 2022L) shouldBe 3068
+        two(input, 2022L) shouldBe 3235
     }
 
     @Test
@@ -209,33 +193,26 @@ class Day17 {
 
     private fun one(input: List<String>): Long {
         val chamber = Chamber(input[0])
-        //        chamber.draw()
         shapes.forEach {
             chamber.add(it)
             if (it.num == 2022L) return chamber.size()
-            //            chamber.draw()
         }
-        //        chamber.draw()
-        return chamber.size()
+        return -1
     }
 
-    private fun two(input: List<String>): Long {
+    private fun two(input: List<String>, wanted: Long = 1_000_000_000_000L): Long {
         val chamber = Chamber(input[0])
-        //        chamber.draw()
         val numShapes = 5L
         val numGas = chamber.gas.length.toLong()
         val seen = mutableMapOf<Pair<Long, String>, Pair<Long, Long>>()
-        val wanted = 1_000_000_000_000L
         var remainingShapes = wanted
         var lookingForCycle = true
         shapes.forEach {
             chamber.add(it)
             remainingShapes -= 1
-            if (lookingForCycle && it.num % numShapes == 0L) {
+            if (lookingForCycle && it.num % numShapes == 0L && chamber.size() >= 8) {
                 // cycle detection. Not sure why, but seems I only have to finger-print the top 8 rows
-                val gasOffset = chamber.gasServed % numGas
-                val chamberTop = chamber.fingerPrint(8)
-                val key = gasOffset to chamberTop
+                val key = chamber.gasServed % numGas to chamber.fingerPrint(8)
                 val previous = seen[key]
                 if (previous == null) {
                     seen[key] = it.num to chamber.size()
@@ -252,14 +229,24 @@ class Day17 {
             }
 
             if (remainingShapes == 0L) return chamber.size()
-            if (it.num % 10_000_000L == 0L) {
-                chamber.shrink()
-                println("shapes: ${it.num}, remaining: total: ${chamber.size()}")
-            }
-            if (it.num == wanted) return chamber.size()
-            //            chamber.draw()
         }
-        //        chamber.draw()
-        return chamber.size()
+
+        return -1L
     }
 }
+
+/*
+Part one was straight-forward, although I likely coded too many lines.  One question
+was how to encode the shapes and chamber.  I went with BooleanArray which worked nicely
+in some places, but then had to switch to a different encoding for the fingerprinting
+used in the cycle detection for part 2 because arrays in Java and Kotlin do not have
+a usable "equals".
+
+One nagging problem is that the cycle detection only looks at the top 8 rows of the
+chamber. This "8" fell from the sky (or actually: from the AoC Slack channel), but
+I have not yet heard a solid justification for why this works.  My guess is that it
+works for the input data provided, but will not work for all inputs.  Someone else
+coded the fingerprint by looking at the outline of the chamber.  Seems more robust
+but also much more complicated (e.g. a zigzag on the right side would require to add
+all indentations to the outline).
+ */
