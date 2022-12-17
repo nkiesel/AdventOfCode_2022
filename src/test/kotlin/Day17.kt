@@ -5,7 +5,7 @@ class Day17 {
     private val sample = """>>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>""".trimIndent().lines()
 
 
-    sealed class Shape(val name: String, val num: Int) {
+    sealed class Shape(val name: String, val num: Long) {
         abstract val lines: List<BooleanArray>
         private var topLineIndex = 0
         fun line(rocks: IntRange) = BooleanArray(7).apply { rocks.forEach { set(it, true) } }
@@ -81,13 +81,13 @@ class Day17 {
     }
 
 
-    private class Minus(num: Int) : Shape("minus", num) {
+    private class Minus(num: Long) : Shape("minus", num) {
         override val lines = listOf(
             line(2..5),
         )
     }
 
-    private class Plus(num: Int) : Shape("plus", num) {
+    private class Plus(num: Long) : Shape("plus", num) {
         override val lines: List<BooleanArray> = listOf(
             line(3..3),
             line(2..4),
@@ -95,7 +95,7 @@ class Day17 {
         )
     }
 
-    private class InvertedL(num: Int) : Shape("inverted L", num) {
+    private class InvertedL(num: Long) : Shape("inverted L", num) {
         override val lines: List<BooleanArray> = listOf(
             line(4..4),
             line(4..4),
@@ -103,7 +103,7 @@ class Day17 {
         )
     }
 
-    private class Line(num: Int) : Shape("line", num) {
+    private class Line(num: Long) : Shape("line", num) {
         override val lines: List<BooleanArray> = listOf(
             line(2..2),
             line(2..2),
@@ -112,7 +112,7 @@ class Day17 {
         )
     }
 
-    private class Square(num: Int) : Shape("square", num) {
+    private class Square(num: Long) : Shape("square", num) {
         override val lines: List<BooleanArray> = listOf(
             line(2..3),
             line(2..3),
@@ -120,7 +120,7 @@ class Day17 {
     }
 
     private val shapes = sequence {
-        var id = 0
+        var id = 0L
         while (true) {
             yield(Minus(++id))
             yield(Plus(++id))
@@ -132,6 +132,9 @@ class Day17 {
 
     private class Chamber(val gas: String) {
         val chamber = ArrayDeque<BooleanArray>()
+        private var discarded = 0L
+        private var skipped = 0L
+        var gasServed = 0L
 
         init {
             chamber.add(BooleanArray(7) { true })
@@ -142,6 +145,8 @@ class Day17 {
                 yieldAll(gas.asSequence())
             }
         }.iterator()
+
+        fun fingerPrint(n: Int) = chamber.take(n).joinToString("") { row -> row.joinToString("") { if (it) "1" else "0" } }
 
         fun draw() {
             println("-------")
@@ -160,6 +165,7 @@ class Day17 {
                     '<' -> shape.left(chamber)
                     '>' -> shape.right(chamber)
                 }
+                gasServed++
                 if (!shape.down(chamber)) {
                     break
                 }
@@ -172,8 +178,20 @@ class Day17 {
             repeat(num) { chamber.addFirst(BooleanArray(7) { false }) }
         }
 
-        fun size(): Int {
-            return chamber.size
+        fun skipForward(num: Long) {
+            skipped += num
+        }
+
+        fun size(): Long {
+            return discarded + skipped + chamber.size - 1
+        }
+
+        fun shrink() {
+            repeat(chamber.size - 1000) {
+                discarded++
+                chamber.removeLast()
+            }
+            return
         }
     }
 
@@ -185,23 +203,63 @@ class Day17 {
 
     @Test
     fun testTwo(input: List<String>) {
-//                two(sample) shouldBe 1514285714288L
-        //        two(input) shouldBe 0
+        two(sample) shouldBe 1514285714288L
+        two(input) shouldBe 1591860465110L
     }
 
-    private fun one(input: List<String>): Int {
+    private fun one(input: List<String>): Long {
         val chamber = Chamber(input[0])
         //        chamber.draw()
         shapes.forEach {
             chamber.add(it)
-            if (it.num == 2022) return chamber.size() - 1
+            if (it.num == 2022L) return chamber.size()
             //            chamber.draw()
         }
         //        chamber.draw()
         return chamber.size()
     }
 
-    private fun two(input: List<String>): Int {
-        return 0
+    private fun two(input: List<String>): Long {
+        val chamber = Chamber(input[0])
+        //        chamber.draw()
+        val numShapes = 5L
+        val numGas = chamber.gas.length.toLong()
+        val seen = mutableMapOf<Pair<Long, String>, Pair<Long, Long>>()
+        val wanted = 1_000_000_000_000L
+        var remainingShapes = wanted
+        var lookingForCycle = true
+        shapes.forEach {
+            chamber.add(it)
+            remainingShapes -= 1
+            if (lookingForCycle && it.num % numShapes == 0L) {
+                // cycle detection. Not sure why, but seems I only have to finger-print the top 8 rows
+                val gasOffset = chamber.gasServed % numGas
+                val chamberTop = chamber.fingerPrint(8)
+                val key = gasOffset to chamberTop
+                val previous = seen[key]
+                if (previous == null) {
+                    seen[key] = it.num to chamber.size()
+                } else {
+                    // cycle!!!
+                    val cycleShapes = it.num - previous.first
+                    val cycleHeight = chamber.size() - previous.second
+                    val skipShapes = remainingShapes / cycleShapes
+                    remainingShapes -= skipShapes * cycleShapes
+                    chamber.skipForward(skipShapes * cycleHeight)
+                    println("skipped $skipShapes, remaining are $remainingShapes")
+                    lookingForCycle = false
+                }
+            }
+
+            if (remainingShapes == 0L) return chamber.size()
+            if (it.num % 10_000_000L == 0L) {
+                chamber.shrink()
+                println("shapes: ${it.num}, remaining: total: ${chamber.size()}")
+            }
+            if (it.num == wanted) return chamber.size()
+            //            chamber.draw()
+        }
+        //        chamber.draw()
+        return chamber.size()
     }
 }
