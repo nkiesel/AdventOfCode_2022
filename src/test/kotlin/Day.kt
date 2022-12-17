@@ -7,13 +7,13 @@ class Day {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 0
-        one(input) shouldBe 0
+//        one(input) shouldBe 0
     }
 
     @Test
     fun testTwo(input: List<String>) {
-        two(sample) shouldBe 0
-        two(input) shouldBe 0
+//        two(sample) shouldBe 0
+//        two(input) shouldBe 0
     }
 
     private fun one(input: List<String>): Int {
