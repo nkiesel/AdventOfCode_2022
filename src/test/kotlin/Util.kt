@@ -93,3 +93,13 @@ fun lcm(a: Int, b: Int): Int = a / gcd(a, b) * b
 fun lcm(a: Long, b: Long): Long = a / gcd(a, b) * b
 
 fun md(x1: Int, y1: Int, x2: Int, y2: Int) = (x1 - x2).absoluteValue + (y1 - y2).absoluteValue
+
+fun <T> Collection<T>.powerSet(): Set<Set<T>> = powerSet(this, setOf(emptySet()))
+
+private tailrec fun <T> powerSet(left: Collection<T>, acc: Set<Set<T>>): Set<Set<T>> {
+    return if (left.isEmpty()) {
+        acc
+    } else {
+        powerSet(left.drop(1), acc + acc.map { it + left.first() })
+    }
+}

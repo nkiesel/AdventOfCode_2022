@@ -5,6 +5,13 @@ import org.junit.jupiter.api.Test
 
 internal class UtilKtTest {
     @Test
+    fun powerSet() {
+        val s = setOf("A", "B", "C")
+        val ps = s.powerSet().filter { it.size != 0 && it.size != s.size }
+        val pss = ps.asSequence().map { it to (s - it) }
+    }
+
+    @Test
     fun permutations() {
         listOf("a", "b", "c").permutations().toList() shouldHaveSize 6
     }
