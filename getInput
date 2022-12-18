@@ -8,5 +8,8 @@ id=${1:-$(date '+%-d')}
 od=${2:-$(date '+%d')}
 
 # the input is not the same for all participants, and we thus have to pass our session cookie value.
-# HTTPie supports storing and using session context (incl. cookies) in a JSON file.
-https --download --quiet --output "input/Day$od" --session-read-only=2022 "https://adventofcode.com/2022/day/$id/input" && git add "input/Day$od"
+# HTTPie supports storing and using session context (incl. cookies) in a JSON file.  If you need to
+# renew the cookie, simply log into the web site, then copy the session cookie value from the
+# "Storage" tab of "Web Developer Tools" into the session file.
+https --download --quiet --output "input/Day$od" --session-read-only=2022 \
+"https://adventofcode.com/2022/day/$id/input" && git add "input/Day$od"
