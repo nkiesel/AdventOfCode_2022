@@ -356,4 +356,4 @@ cube layout in the input data was different from the layout in the sample, which
 added another round of coding the transitions.  The one useful simplification for
 part 2 I came up with was that I converted the coordinates for every side of the
 cube to start with [0;0] in the top left corner.
- */
+*/
