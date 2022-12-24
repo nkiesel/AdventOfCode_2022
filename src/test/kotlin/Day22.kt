@@ -1,8 +1,8 @@
 import kotlin.math.sqrt
-import Day22.Face.D
-import Day22.Face.L
-import Day22.Face.R
-import Day22.Face.U
+import Day22.Facing.D
+import Day22.Facing.L
+import Day22.Facing.R
+import Day22.Facing.U
 import Day22.Side.S1
 import Day22.Side.S2
 import Day22.Side.S3
@@ -133,17 +133,19 @@ class Day22 {
         }
     }
 
-    enum class Face { U, D, L, R }
+    enum class Facing { U, D, L, R }
 
     enum class Side { S1, S2, S3, S4, S5, S6 }
 
     class Board2(map: List<String>, path: String, val sample: Boolean) {
         private val cs = sqrt((map.maxOf { it.length } * map.size / 2 / 6).toFloat()).toInt()
+        private val range = 0 until cs
         private var side = S1
         private var x: Int = 0
         private var y: Int = 0
-        private var face = R
-        private val i = path.iterator()
+        private var facing = R
+        private val moves = Regex("""\d+""").findAll(path).map { it.value.toInt() }
+        private val turns = Regex("""[LR]""").findAll(path).map { it.value[0] }.iterator()
         private val cMap = if (sample) mapOf(
             S1 to (2 to 0),
             S2 to (0 to 1),
@@ -171,91 +173,91 @@ class Day22 {
 
         private fun coordinates() = with(cMap[side]!!) { x + first * cs to y + second * cs }
 
-        class Attempt(val side: Side, private val face: Face, val x: Int, val y: Int) {
+        class Attempt(val side: Side, private val facing: Facing, val x: Int, val y: Int) {
             fun set(board: Board2) {
                 board.side = side
-                board.face = face
+                board.facing = facing
                 board.x = x
                 board.y = y
             }
         }
 
-        private fun nextCube(nx: Int, ny: Int): Attempt {
+        private fun nextSide(nx: Int, ny: Int): Attempt {
             val x = nx.mod(cs)
             val y = ny.mod(cs)
-            val lx = cs - 1
-            val rx = 0
-            val ix = cs - x - 1
-            val uy = cs - 1
-            val dy = 0
-            val iy = cs - y - 1
+            val lx = range.last
+            val rx = range.first
+            val ix = range.last - x
+            val uy = range.last
+            val dy = range.first
+            val iy = range.last - y
             return when (side) {
-                S1 -> if (sample) when (face) {
+                S1 -> if (sample) when (facing) {
                     R -> Attempt(S6, L, lx, ix)
                     L -> Attempt(S3, D, y, dy)
                     U -> Attempt(S2, D, ix, dy)
                     D -> Attempt(S4, D, x, 0)
-                } else when(face) {
+                } else when(facing) {
                     R -> Attempt(S2, R, rx, y)
                     L -> Attempt(S5, R, rx, iy)
                     U -> Attempt(S6, R, rx, x)
                     D -> Attempt(S3, D, x, dy)
                 }
 
-                S2 -> if (sample) when (face) {
+                S2 -> if (sample) when (facing) {
                     R -> Attempt(S3, R, rx, y)
                     L -> Attempt(S6, U, iy, uy)
                     D -> Attempt(S5, U, ix, uy)
                     U -> Attempt(S1, D, ix, dy)
-                } else when (face) {
+                } else when (facing) {
                     R -> Attempt(S4, L, lx, iy)
                     L -> Attempt(S1, L, lx, y)
                     D -> Attempt(S3, L, lx, x)
                     U -> Attempt(S6, U, x, uy)
                 }
 
-                S3 -> if (sample) when (face) {
+                S3 -> if (sample) when (facing) {
                     R -> Attempt(S4, R, rx, y)
                     L -> Attempt(S2, L, lx, y)
                     D -> Attempt(S5, R, rx, ix)
                     U -> Attempt(S1, R, rx, x)
-                } else when (face) {
+                } else when (facing) {
                     R -> Attempt(S2, U, y, uy)
                     L -> Attempt(S5, D, y, dy)
                     D -> Attempt(S4, D, x, dy)
                     U -> Attempt(S1, U, x, uy)
                 }
 
-                S4 -> if (sample) when (face) {
+                S4 -> if (sample) when (facing) {
                     R -> Attempt(S6, D, iy, dy)
                     L -> Attempt(S3, L, lx, y)
                     D -> Attempt(S5, D, x, dy)
                     U -> Attempt(S1, U, x, uy)
-                } else when (face) {
+                } else when (facing) {
                     R -> Attempt(S2, L, lx, iy)
                     L -> Attempt(S5, L, lx, y)
                     D -> Attempt(S6, L, lx, x)
                     U -> Attempt(S3, U, x, uy)
                 }
 
-                S5 -> if (sample) when (face) {
+                S5 -> if (sample) when (facing) {
                     R -> Attempt(S6, R, rx, y)
                     L -> Attempt(S3, U, ix, uy)
                     D -> Attempt(S2, U, ix, uy)
                     U -> Attempt(S4, U, x, uy)
-                } else when (face) {
+                } else when (facing) {
                     R -> Attempt(S4, R, rx, y)
                     L -> Attempt(S1, R, rx, iy)
                     D -> Attempt(S6, D, x, dy)
                     U -> Attempt(S3, R, rx, x)
                 }
 
-                S6 -> if (sample) when (face) {
+                S6 -> if (sample) when (facing) {
                     R -> Attempt(S1, L, lx, ix)
                     L -> Attempt(S5, L, lx, y)
                     D -> Attempt(S2, R, rx, ix)
                     U -> Attempt(S4, L, lx, ix)
-                } else when (face) {
+                } else when (facing) {
                     R -> Attempt(S4, U, y, uy)
                     L -> Attempt(S1, D, y, dy)
                     D -> Attempt(S2, D, x, dy)
@@ -265,20 +267,20 @@ class Day22 {
         }
 
         private fun step(): Boolean {
-            val nx = when (face) {
+            val nx = when (facing) {
                 R -> x + 1
                 L -> x - 1
                 else -> x
             }
-            val ny = when (face) {
+            val ny = when (facing) {
                 U -> y - 1
                 D -> y + 1
                 else -> y
             }
-            val a = if (nx in (0 until cs) && ny in (0 until cs)) {
-                Attempt(side, face, nx, ny)
+            val a = if (nx in range && ny in range) {
+                Attempt(side, facing, nx, ny)
             } else {
-                nextCube(nx, ny)
+                nextSide(nx, ny)
             }
             if (cube[a.side]!![a.y][a.x] == '#') {
                 return false
@@ -294,15 +296,15 @@ class Day22 {
         }
 
         private fun turn(c: Char) {
-            face = when (c) {
-                'L' -> when (face) {
+            facing = when (c) {
+                'L' -> when (facing) {
                     L -> D
                     R -> U
                     U -> L
                     D -> R
                 }
 
-                'R' -> when (face) {
+                'R' -> when (facing) {
                     L -> U
                     R -> D
                     U -> R
@@ -314,21 +316,12 @@ class Day22 {
         }
 
         fun followPath(): Int {
-            var steps = 0
-            while (i.hasNext()) {
-                when (val c = i.next()) {
-                    'L', 'R' -> {
-                        move(steps); steps = 0; turn(c)
-                    }
-
-                    else -> {
-                        steps = steps * 10 + c.digitToInt()
-                    }
-                }
+            for (steps in moves) {
+                move(steps)
+                if (turns.hasNext()) turn(turns.next())
             }
-            move(steps)
             val (fx, fy) = coordinates()
-            return 1000 * (fy + 1) + 4 * (fx + 1) + when (face) {
+            return 1000 * (fy + 1) + 4 * (fx + 1) + when (facing) {
                 R -> 0
                 D -> 1
                 L -> 2

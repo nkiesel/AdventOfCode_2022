@@ -76,7 +76,7 @@ class Day23 {
         return elves.map { elf ->
             with (elf) {
                 if (x == px && y == py || elves.count { it.px == px && it.py == py } != 1) {
-                    elf
+                    this
                 } else {
                     Elf(px, py)
                 }
@@ -114,4 +114,4 @@ but this is clearly a lesson learned!
 Update: Made elves immutable, and simplified `neighbors` to a Map to Boolean instead of a
 Set<Elf>. I initially anticipated that we would have to handle these differently in part 2;
 classical over-engineering.
- */
+*/
