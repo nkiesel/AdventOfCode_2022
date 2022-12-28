@@ -39,9 +39,9 @@ fun Array<IntArray>.neighbors8(x: Int, y: Int): List<Pair<Int, Int>> =
         .map { (dx, dy) -> x + dx to y + dy }
         .filter { (cx, cy) -> cx in this[0].indices && cy in this.indices }
 
-fun <T> List<T>.chunkedBy(selector: (T) -> Boolean): List<List<T>> =
+fun <T> List<T>.chunkedBy(predicate: (T) -> Boolean): List<List<T>> =
     fold(mutableListOf(mutableListOf<T>())) { acc, item ->
-        if (selector(item)) {
+        if (predicate(item)) {
             acc.add(mutableListOf())
         } else {
             acc.last().add(item)
