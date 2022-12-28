@@ -1,4 +1,8 @@
+import java.lang.instrument.ClassFileTransformer
+import java.util.Collections
 import kotlin.math.absoluteValue
+import kotlin.math.max
+import kotlin.math.min
 
 fun <T> List<T>.permutations(): Sequence<List<T>> = sequence {
     val indices = IntArray(size) { it }
@@ -92,7 +96,17 @@ fun lcm(a: Int, b: Int): Int = a / gcd(a, b) * b
  */
 fun lcm(a: Long, b: Long): Long = a / gcd(a, b) * b
 
-fun md(x1: Int, y1: Int, x2: Int, y2: Int) = (x1 - x2).absoluteValue + (y1 - y2).absoluteValue
+fun manhattanDistance(x1: Int, y1: Int, x2: Int, y2: Int) = (x1 - x2).absoluteValue + (y1 - y2).absoluteValue
+
+fun manhattanDistance(x1: Int, y1: Int, z1: Int, x2: Int, y2: Int, z2: Int) = (x1 - x2).absoluteValue + (y1 - y2).absoluteValue + (z1 - z2).absoluteValue
+
+fun manhattanDistance(p1: IntArray, p2: IntArray) = p1.zip(p2).sumOf { (it.first - it.second).absoluteValue }
+
+fun manhattanDistance(x1: Long, y1: Long, x2: Long, y2: Long) = (x1 - x2).absoluteValue + (y1 - y2).absoluteValue
+
+fun manhattanDistance(x1: Long, y1: Long, z1: Long, x2: Long, y2: Long, z2: Long) = (x1 - x2).absoluteValue + (y1 - y2).absoluteValue + (z1 - z2).absoluteValue
+
+fun manhattanDistance(p1: LongArray, p2: LongArray) = p1.zip(p2).sumOf { (it.first - it.second).absoluteValue }
 
 fun <T> Collection<T>.powerSet(): Set<Set<T>> = powerSet(this, setOf(emptySet()))
 
@@ -102,4 +116,32 @@ private tailrec fun <T> powerSet(left: Collection<T>, acc: Set<Set<T>>): Set<Set
     } else {
         powerSet(left.drop(1), acc + acc.map { it + left.first() })
     }
+}
+
+fun Collection<Int>.minMax(): IntArray {
+    return fold(intArrayOf(Int.MAX_VALUE, Int.MIN_VALUE)) { acc, i -> acc[0] = min(acc[0], i); acc[1] = max(acc[1], i); acc }
+}
+
+fun Collection<Long>.minMax(): LongArray {
+    return fold(longArrayOf(Long.MAX_VALUE, Long.MIN_VALUE)) { acc, i -> acc[0] = min(acc[0], i); acc[1] = max(acc[1], i); acc }
+}
+
+fun Collection<Double>.minMax(): DoubleArray {
+    return fold(doubleArrayOf(Double.MAX_VALUE, Double.MIN_VALUE)) { acc, i -> acc[0] = min(acc[0], i); acc[1] = max(acc[1], i); acc }
+}
+
+fun Collection<Float>.minMax(): FloatArray {
+    return fold(floatArrayOf(Float.MAX_VALUE, Float.MIN_VALUE)) { acc, i -> acc[0] = min(acc[0], i); acc[1] = max(acc[1], i); acc }
+}
+
+fun Collection<Int>.multiFold(start: List<Int>, transformers: List<(Int, Int) -> Int>): List<Int> {
+    require(start.size == transformers.size)
+    return fold(start) { acc, i -> acc.mapIndexed { index, a -> transformers[index](i, a) } }
+}
+
+fun Collection<Int>.multiReduce(vararg transformers: (Int, Int) -> Int): List<Int> {
+    require(transformers.isNotEmpty()) { "transformers must not be empty"}
+    if (isEmpty()) return emptyList()
+    val start = first().let { f -> List(transformers.size) { f } }
+    return drop(1).fold(start) { acc, i -> acc.mapIndexed { index, a -> transformers[index](i, a) } }
 }

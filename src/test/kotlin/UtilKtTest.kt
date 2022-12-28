@@ -1,3 +1,5 @@
+import kotlin.math.max
+import kotlin.math.min
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -85,5 +87,43 @@ internal class UtilKtTest {
         lcm(10, 10) shouldBe 10
         lcm(101, 103) shouldBe 101 * 103
         lcm(101 * 3, 103 * 6) shouldBe 101 * 103 * 6
+    }
+
+    @Test
+    fun minMax() {
+        listOf(3, 1, 4, 1, 5, 9).minMax() shouldBe intArrayOf(1, 9)
+        val (i, a) = listOf(3, 1, 4).minMax()
+        i shouldBe 1
+        a shouldBe 4
+    }
+
+    @Test
+    fun `minMax using multiFold`() {
+        fun minMax(l: List<Int>) = l.multiFold(listOf(Int.MAX_VALUE, Int.MIN_VALUE), listOf(::min, ::max))
+        minMax(listOf(3, 1, 4, 1, 5, 9)) shouldBe intArrayOf(1, 9)
+        val (i, a) = listOf(3, 1, 4).minMax()
+        i shouldBe 1
+        a shouldBe 4
+    }
+
+    @Test
+    fun `minMax using multiReduce`() {
+        fun minMax(l: List<Int>) = l.multiReduce(::min, ::max)
+        minMax(listOf(3, 1, 4, 1, 5, 9)) shouldBe intArrayOf(1, 9)
+        val (i, a) = listOf(3, 1, 4).minMax()
+        i shouldBe 1
+        a shouldBe 4
+    }
+
+    @Test
+    fun multiFold() {
+        listOf(3, 1, 4).multiFold(listOf(Int.MAX_VALUE, Int.MIN_VALUE), listOf(::min, ::max)) shouldBe listOf(1, 4)
+    }
+
+    @Test
+    fun multiReduce() {
+        listOf(3, 1, 4).reduce(::min) shouldBe 1
+        listOf(3, 1, 4).reduce(::max) shouldBe 4
+        listOf(3, 1, 4).multiReduce(::min, ::max) shouldBe listOf(1, 4)
     }
 }

@@ -122,7 +122,6 @@ class Day21 {
             if (mt.name == me) return required
             n = mt as Expression
         }
-        return -1L
     }
 }
 

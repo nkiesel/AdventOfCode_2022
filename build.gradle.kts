@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.7.22"
+    kotlin("jvm") version "1.8.0"
     alias(libs.plugins.versions)
     alias(libs.plugins.versions.filter)
     alias(libs.plugins.versions.update)
@@ -31,6 +31,6 @@ tasks.test {
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }

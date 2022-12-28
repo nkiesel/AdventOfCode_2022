@@ -100,7 +100,7 @@ class Day24 {
                     .filter {
                         it == startPos || it == endPos ||
                             (it.x in 0 until cols && it.y in 0 until rows && valley.pos(it.x, it.y).isClear())
-                    }.sortedBy { md(it.x, it.y, endPos.x, endPos.y) }.map { Candidate(next, it) }
+                    }.sortedBy { manhattanDistance(it.x, it.y, endPos.x, endPos.y) }.map { Candidate(next, it) }
             }.find { it.value.elf == endPos }
             return r?.value?.minute ?: -1
         }

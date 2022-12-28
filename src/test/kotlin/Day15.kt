@@ -32,11 +32,11 @@ class Day15 {
     }
 
     private data class Sensor(val sx: Int, val sy: Int, val bx: Int, val by: Int) {
-        val scope = md(sx, sy, bx, by)
+        val scope = manhattanDistance(sx, sy, bx, by)
         val xRange = (sx - scope)..(sx + scope)
 
         fun noBeacon(x: Int, y: Int): Boolean {
-            return !(x == bx && y == by) && ((x == sx && y == sy) || md(sx, sy, x, y) <= scope)
+            return !(x == bx && y == by) && ((x == sx && y == sy) || manhattanDistance(sx, sy, x, y) <= scope)
         }
 
         fun plusOne(): Set<Pair<Int, Int>> {

@@ -223,7 +223,7 @@ class Day17 {
                     val skipShapes = remainingShapes / cycleShapes
                     remainingShapes -= skipShapes * cycleShapes
                     chamber.skipForward(skipShapes * cycleHeight)
-                    println("skipped $skipShapes, remaining are $remainingShapes")
+//                    println("skipped $skipShapes, remaining are $remainingShapes")
                     lookingForCycle = false
                 }
             }
