@@ -1,5 +1,5 @@
 [versions]
-junit5 = "5.9.1"
+junit5 = "5.9.2"
 kotest = "5.5.4"
 plugin-versions = "0.44.0"
 plugin-versionsFilter = "0.1.16"
