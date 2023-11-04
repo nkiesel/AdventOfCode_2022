@@ -31,13 +31,13 @@ class Day07 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 95437L
-        one(input) shouldBe 1444896L
+        one(input) shouldBe 919137L
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 24933642L
-        two(input) shouldBe 404395L
+        two(input) shouldBe 2877389L
     }
 
     data class File(val path: List<String>, val name: String, val size: Long)

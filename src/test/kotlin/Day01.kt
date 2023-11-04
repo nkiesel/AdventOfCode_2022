@@ -23,14 +23,14 @@ class Day01 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 24000
-        one(input) shouldBe 70764
-        two(input, 1) shouldBe 70764
+        one(input) shouldBe 67027
+        two(input, 1) shouldBe 67027
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 45000
-        two(input) shouldBe 203905
+        two(input) shouldBe 197291
     }
 
     private fun parse(input: List<String>): List<List<Int>> = input.chunkedBy { it.isEmpty() }.map { it.map(String::toInt) }

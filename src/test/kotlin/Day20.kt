@@ -17,13 +17,13 @@ class Day20 {
     @Test
     fun testOne(input: List<String>) {
         solve(sample) shouldBe 3L
-        solve(input) shouldBe 3346L
+        solve(input) shouldBe 13289L
     }
 
     @Test
     fun testTwo(input: List<String>) {
         solve(sample, 811589153L, 10) shouldBe 1623178306L
-        solve(input, 811589153L, 10) shouldBe 4265712588168L
+        solve(input, 811589153L, 10) shouldBe 2865721299243L
     }
 
     private fun solve(input: List<String>, key: Long = 1L, mix: Int = 1): Long {

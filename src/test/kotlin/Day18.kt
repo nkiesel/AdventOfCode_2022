@@ -22,13 +22,13 @@ class Day18 {
     fun testOne(input: List<String>) {
         one(listOf("1,1,1", "2,1,1")) shouldBe 10
         one(sample) shouldBe 64
-        one(input) shouldBe 3530
+        one(input) shouldBe 4418
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 58
-        two(input) shouldBe 2000
+        two(input) shouldBe 2486
     }
 
     data class Point(val x: Int, val y: Int, val z: Int) {

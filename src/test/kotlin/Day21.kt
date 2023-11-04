@@ -23,13 +23,13 @@ class Day21 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 152L
-        one(input) shouldBe 364367103397416L
+        one(input) shouldBe 72664227897438L
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 301L
-        two(input) shouldBe 3782852515583L
+        two(input) shouldBe 3916491093817L
     }
 
     private fun one(input: List<String>): Long {

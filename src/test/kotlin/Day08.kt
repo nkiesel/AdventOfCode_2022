@@ -13,13 +13,13 @@ class Day08 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 21
-        one(input) shouldBe 1801
+        one(input) shouldBe 1688
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 8
-        two(input) shouldBe 209880
+        two(input) shouldBe 410400
     }
 
     data class Tree(val height: Int, var visible: Boolean = false) {

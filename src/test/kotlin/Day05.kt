@@ -17,13 +17,13 @@ class Day05 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe "CMZ"
-        one(input) shouldBe "GRTSWNJHH"
+        one(input) shouldBe "HNSNMTLHQ"
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe "MCD"
-        two(input) shouldBe "QLFQDBBHM"
+        two(input) shouldBe "RNLFDJMCT"
     }
 
     class Move(val count: Int, val source: Int, val dest: Int)

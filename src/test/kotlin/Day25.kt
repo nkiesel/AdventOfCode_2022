@@ -21,7 +21,7 @@ class Day25 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe "2=-1=0"
-        one(input) shouldBe "2=--=0000-1-0-=1=0=2"
+        one(input) shouldBe "2-2=21=0021=-02-1=-0"
     }
 
     private fun Long.toSnafu(): String {

@@ -35,13 +35,13 @@ class Day11 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 10605L
-        one(input) shouldBe 112815L
+        one(input) shouldBe 57838L
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 2713310158L
-        two(input) shouldBe 25738411485L
+        two(input) shouldBe 15050382231L
     }
 
     private class Operation(val op: String, val arg: Long?) {

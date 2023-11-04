@@ -13,13 +13,13 @@ class Day12 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 31
-        one(input) shouldBe 330
+        one(input) shouldBe 391
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 29
-        two(input) shouldBe 321
+        two(input) shouldBe 386
     }
 
     class Parsed(val graph: Map<String, List<String>>, val start: String, val end: String, val lowest: List<String>)

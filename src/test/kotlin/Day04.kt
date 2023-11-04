@@ -14,13 +14,13 @@ class Day04 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 2
-        one(input) shouldBe 567
+        one(input) shouldBe 518
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 4
-        two(input) shouldBe 907
+        two(input) shouldBe 909
     }
 
     private val pattern = Regex("""\D""")

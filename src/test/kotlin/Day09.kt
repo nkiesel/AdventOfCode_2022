@@ -29,16 +29,16 @@ class Day09 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 13
-        one(input) shouldBe 6087
-        onetwo(input, 2) shouldBe 6087
+        one(input) shouldBe 6037
+        onetwo(input, 2) shouldBe 6037
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 1
         two(sample2) shouldBe 36
-        two(input) shouldBe 2493
-        onetwo(input, 10) shouldBe 2493
+        two(input) shouldBe 2485
+        onetwo(input, 10) shouldBe 2485
     }
 
     data class Pos(var x: Int, var y: Int) {

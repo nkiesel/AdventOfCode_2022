@@ -11,13 +11,13 @@ class Day19 {
     @Test
     fun testOne(input: List<String>) {
         part1(sample) shouldBe 33
-        part1(input) shouldBe 1725
+        part1(input) shouldBe 1958
     }
 
     @Test
     fun testTwo(input: List<String>) {
         part2(sample) shouldBe 56 * 62
-        part2(input) shouldBe 15510
+        part2(input) shouldBe 4257
     }
 
     data class Blueprint(

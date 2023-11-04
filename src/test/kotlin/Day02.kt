@@ -17,13 +17,13 @@ class Day02 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 15
-        one(input) shouldBe 13484
+        one(input) shouldBe 10404
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 12
-        two(input) shouldBe 13433
+        two(input) shouldBe 10334
     }
 
     enum class Shape(val score: Int) {

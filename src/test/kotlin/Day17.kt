@@ -180,15 +180,15 @@ class Day17 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 3068
-        one(input) shouldBe 3235
+        one(input) shouldBe 3197
         two(sample, 2022L) shouldBe 3068
-        two(input, 2022L) shouldBe 3235
+        two(input, 2022L) shouldBe 3197
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 1514285714288L
-        two(input) shouldBe 1591860465110L
+        two(input) shouldBe 1568513119571L
     }
 
     private fun one(input: List<String>): Long {

@@ -22,13 +22,13 @@ class Day15 {
     @Test
     fun testOne(input: List<String>) {
         one(sample, 10) shouldBe 26
-        one(input, 2000000) shouldBe 5108096
+        one(input, 2000000) shouldBe 5083287
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample, 20) shouldBe 56000011
-        two(input, 4000000) shouldBe 10553942650264L
+        two(input, 4000000) shouldBe 13134039205729L
     }
 
     private data class Sensor(val sx: Int, val sy: Int, val bx: Int, val by: Int) {

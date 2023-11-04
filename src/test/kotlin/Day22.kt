@@ -33,13 +33,13 @@ class Day22 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 6032
-        one(input) shouldBe 89224
+        one(input) shouldBe 149138
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample, true) shouldBe 5031
-        two(input, false) shouldBe 136182
+        two(input, false) shouldBe 153203
     }
 
     class Board1(val map: List<String>, path: String) {

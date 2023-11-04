@@ -15,13 +15,13 @@ class Day03 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 157
-        one(input) shouldBe 7766
+        one(input) shouldBe 7737
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 70
-        two(input) shouldBe 2415
+        two(input) shouldBe 2697
     }
 
     private fun one(input: List<String>): Int = input

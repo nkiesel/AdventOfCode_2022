@@ -18,13 +18,13 @@ class Day16 {
     @Test
     fun testOne(input: List<String>) {
         oneTwo(sample, 1) shouldBe 1651
-        oneTwo(input, 1) shouldBe 2183
+        oneTwo(input, 1) shouldBe 1376
     }
 
     @Test
     fun testTwo(input: List<String>) {
         oneTwo(sample, 2) shouldBe 1707
-        oneTwo(input, 2) shouldBe 2911
+        oneTwo(input, 2) shouldBe 1933
     }
 
     private data class Valve(val name: String, val flowRate: Int, val next: List<String>)

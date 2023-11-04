@@ -7,13 +7,13 @@ class Day06 {
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 5
-        one(input) shouldBe 1582
+        one(input) shouldBe 1361
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 23
-        two(input) shouldBe 3588
+        two(input) shouldBe 3263
     }
 
     private fun solve(input: List<String>, n: Int): Int = input[0].windowedSequence(n).indexOfFirst { it.toSet().size == n } + n
